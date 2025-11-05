@@ -88,7 +88,7 @@ export default function App() {
     "/assets/images/imago2.jpg",
     "/assets/images/imago3.jpg",
     "/assets/images/imago4.jpg",
-    "/assets/images/imago5.png"
+    "/assets/images/imago5.jpg"
   ];
 
   // VOLANTINO FULLSCREEN
