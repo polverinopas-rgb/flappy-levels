@@ -2,7 +2,8 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- viewport aggiornato per iOS notch e per viewport-fit -->
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <title>Flappy Levels</title>
 
@@ -15,21 +16,42 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <script type="module" crossorigin src="/assets/index-DCXoELLj.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Dtn62Xmo.css">
+    <style>
+      /* assicurati che il documento usi la safe area */
+      html, body, #root { height: 100%; }
+      body { margin: 0; background-color: #000; -webkit-font-smoothing:antialiased; }
+    </style>
+    <script type="module" crossorigin src="/assets/index-CxmfqBR8.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-C9t1UBEb.css">
     <script type="module">import.meta.url;import("_").catch(()=>1);(async function*(){})().next();window.__vite_is_modern_browser=true</script>
     <script type="module">!function(){if(window.__vite_is_modern_browser)return;console.warn("vite: loading legacy chunks, syntax error above and the same error below should be ignored");var e=document.getElementById("vite-legacy-polyfill"),n=document.createElement("script");n.src=e.src,n.onload=function(){System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))},document.body.appendChild(n)}();</script>
   </head>
 
-  <body style="margin:0; background-color:#000;">
+  <body>
     <noscript>Attiva JavaScript per visualizzare questo sito correttamente.</noscript>
     <div id="root"></div>
 
-    <!-- Disabilita eventuali service worker -->
+    <!-- Script: calcola --vh per iOS e aggiorna su resize/orientationchange -->
+    <script>
+      (function () {
+        function setVh() {
+          // 1vh reale in px
+          const vh = window.innerHeight * 0.01;
+          document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        setVh();
+        window.addEventListener('resize', setVh);
+        window.addEventListener('orientationchange', function () {
+          // piccolo timeout perché iOS ha bisogno di tempo dopo rotazione
+          setTimeout(setVh, 250);
+        });
+      })();
+    </script>
 
-    <!-- Script principale (Vite gestirà il bundle in produzione) -->
-    <script nomodule>!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",(function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()}),!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();</script>
-  <script nomodule crossorigin id="vite-legacy-polyfill" src="/assets/polyfills-legacy-m2OYfyUt.js"></script>
-  <script nomodule crossorigin id="vite-legacy-entry" data-src="/assets/index-legacy-C3D-smGK.js">System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))</script>
-</body>
+    <!-- Disabilita eventuali service worker (mantieni, se vuoi) -->
+
+    <script nomodule>!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",(function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()}),!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();</script>
+    <script nomodule crossorigin id="vite-legacy-polyfill" src="/assets/polyfills-legacy-m2OYfyUt.js"></script>
+    <script nomodule crossorigin id="vite-legacy-entry" data-src="/assets/index-legacy-D1g1aZlT.js">System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))</script>
+  </body>
 </html>
