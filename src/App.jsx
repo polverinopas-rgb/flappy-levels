@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Game from "./Game";
 
 const levels = [
@@ -57,6 +57,31 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [firstLoadDone, setFirstLoadDone] = useState(false);
 
+  const storyImgs = [
+    "/assets/images/imago1.jpg",
+    "/assets/images/imago2.jpg",
+    "/assets/images/imago3.jpg",
+    "/assets/images/imago4.jpg",
+    "/assets/images/imago5.jpg"
+  ];
+
+  // Aggiorna --vh dinamicamente per iOS
+  useEffect(() => {
+    const setVh = () => {
+      document.documentElement.style.setProperty(
+        "--vh",
+        `${window.innerHeight * 0.01}px`
+      );
+    };
+    setVh();
+    window.addEventListener("resize", setVh);
+    window.addEventListener("orientationchange", setVh);
+    return () => {
+      window.removeEventListener("resize", setVh);
+      window.removeEventListener("orientationchange", setVh);
+    };
+  }, []);
+
   const startLevel = (index) => {
     if (!firstLoadDone) {
       setLoading(true);
@@ -83,22 +108,16 @@ export default function App() {
     }
   };
 
-  const storyImgs = [
-    "/assets/images/imago1.jpg",
-    "/assets/images/imago2.jpg",
-    "/assets/images/imago3.jpg",
-    "/assets/images/imago4.jpg",
-    "/assets/images/imago5.jpg"
-  ];
-
+  // ---------------------------
   // VOLANTINO FULLSCREEN
+  // ---------------------------
   if (showVolantino) {
     return (
       <div
         style={{
           position: "relative",
           width: "100%",
-          height: "100vh",
+          height: "calc(var(--vh, 1vh) * 100)",
           overflow: "hidden"
         }}
       >
@@ -115,7 +134,7 @@ export default function App() {
           onClick={() => setShowVolantino(false)}
           style={{
             position: "absolute",
-            bottom: "200px",
+            bottom: `calc(200px + env(safe-area-inset-bottom))`,
             left: "50%",
             transform: "translateX(-50%)",
             padding: "14px 22px",
@@ -134,13 +153,15 @@ export default function App() {
     );
   }
 
+  // ---------------------------
   // MENU PRINCIPALE
+  // ---------------------------
   if (!mode) {
     return (
       <div
         style={{
           width: "100%",
-          height: "100vh",
+          height: "calc(var(--vh, 1vh) * 100)",
           background: "linear-gradient(180deg, #2c2c2c, #000)",
           color: "#fff",
           display: "flex",
@@ -152,111 +173,47 @@ export default function App() {
           padding: 12
         }}
       >
-        <h1
-          style={{
-            fontSize: "2.5rem",
-            marginBottom: 30,
-            color: "gold"
-          }}
-        >
+        <h1 style={{ fontSize: "2.5rem", marginBottom: 30, color: "gold" }}>
           Seleziona modalità
         </h1>
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 40,
-            alignItems: "center"
-          }}
-        >
-          {/* Sezione Gioco */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 40, alignItems: "center" }}>
           <div>
             <h2 style={{ color: "orange", marginBottom: 15 }}>🎮 Gioco</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <button
                 onClick={() => setMode("levels")}
-                style={{
-                  padding: "10px 18px",
-                  background: "gold",
-                  border: "none",
-                  borderRadius: 8,
-                  cursor: "pointer"
-                }}
+                style={{ padding: "10px 18px", background: "gold", border: "none", borderRadius: 8, cursor: "pointer" }}
               >
                 Livelli
               </button>
               <button
                 onClick={() => setMode("arcade")}
-                style={{
-                  padding: "10px 18px",
-                  background: "orange",
-                  border: "none",
-                  borderRadius: 8,
-                  cursor: "pointer"
-                }}
+                style={{ padding: "10px 18px", background: "orange", border: "none", borderRadius: 8, cursor: "pointer" }}
               >
                 Arcade
               </button>
             </div>
           </div>
 
-          {/* Sezione Informazioni */}
           <div>
             <h2 style={{ color: "lightblue", marginBottom: 15 }}>ℹ️ Informazioni</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <button
-                onClick={() =>
-                  window.open(
-                    "https://www.instagram.com/parrocchiasanmassimoo?utm_source=ig_web_button_share_sheet&igsh=N3V4NzZlNHExZG8=",
-                    "_blank"
-                  )
-                }
-                style={{
-                  padding: "10px 18px",
-                  background: "teal",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: 8,
-                  cursor: "pointer"
-                }}
+                onClick={() => window.open("https://www.instagram.com/parrocchiasanmassimoo/", "_blank")}
+                style={{ padding: "10px 18px", background: "teal", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer" }}
               >
                 Instagram
               </button>
-
-              {/* 🔵 NUOVO PULSANTE FACEBOOK */}
               <button
-                onClick={() =>
-                  window.open(
-                    "https://facebook.com/groups/218139638344704/",
-                    "_blank"
-                  )
-                }
-                style={{
-                  padding: "10px 18px",
-                  background: "#1877f2", // colore ufficiale Facebook
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: 8,
-                  cursor: "pointer"
-                }}
+                onClick={() => window.open("https://facebook.com/groups/218139638344704/", "_blank")}
+                style={{ padding: "10px 18px", background: "#1877f2", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer" }}
               >
                 Facebook
               </button>
-
               <button
-                onClick={() => {
-                  setMode("storia");
-                  setStoryPage(0);
-                }}
-                style={{
-                  padding: "10px 18px",
-                  background: "purple",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: 8,
-                  cursor: "pointer"
-                }}
+                onClick={() => { setMode("storia"); setStoryPage(0); }}
+                style={{ padding: "10px 18px", background: "purple", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer" }}
               >
                 Storia
               </button>
@@ -267,14 +224,16 @@ export default function App() {
     );
   }
 
+  // ---------------------------
   // STORIA
+  // ---------------------------
   if (mode === "storia") {
     const img = storyImgs[storyPage];
     return (
       <div
         style={{
           width: "100%",
-          height: "100vh",
+          height: "calc(var(--vh, 1vh) * 100)",
           background: "#111",
           display: "flex",
           flexDirection: "column",
@@ -296,36 +255,19 @@ export default function App() {
             boxShadow: "0 0 20px rgba(255,255,255,0.3)"
           }}
         >
-          <img
-            src={img}
-            alt={`imago${storyPage + 1}`}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
+          <img src={img} alt={`imago${storyPage + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         </div>
         {storyPage < storyImgs.length - 1 ? (
           <button
             onClick={() => setStoryPage(storyPage + 1)}
-            style={{
-              padding: "12px 20px",
-              background: "gold",
-              border: "none",
-              borderRadius: 8,
-              cursor: "pointer"
-            }}
+            style={{ padding: "12px 20px", background: "gold", border: "none", borderRadius: 8, cursor: "pointer" }}
           >
             Continua
           </button>
         ) : (
           <button
             onClick={() => setMode(null)}
-            style={{
-              padding: "12px 20px",
-              background: "crimson",
-              color: "#fff",
-              border: "none",
-              borderRadius: 8,
-              cursor: "pointer"
-            }}
+            style={{ padding: "12px 20px", background: "crimson", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer" }}
           >
             Torna al menu
           </button>
@@ -334,13 +276,15 @@ export default function App() {
     );
   }
 
+  // ---------------------------
   // SCELTA LIVELLO
+  // ---------------------------
   if (mode === "levels" && currentLevel === null) {
     return (
       <div
         style={{
           width: "100%",
-          height: "100vh",
+          height: "calc(var(--vh, 1vh) * 100)",
           background: "#000",
           color: "#fff",
           display: "flex",
@@ -353,30 +297,14 @@ export default function App() {
       >
         <h1>Seleziona livello</h1>
         {loading ? (
-          <p style={{ marginTop: 20, fontSize: "1.2rem", color: "gold" }}>
-            Caricamento...
-          </p>
+          <p style={{ marginTop: 20, fontSize: "1.2rem", color: "gold" }}>Caricamento...</p>
         ) : (
-          <div
-            style={{
-              marginTop: 16,
-              display: "flex",
-              flexDirection: "column",
-              gap: 10,
-              alignItems: "center"
-            }}
-          >
+          <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
             {levels.map((lvl, idx) => (
               <button
                 key={idx}
                 onClick={() => startLevel(idx)}
-                style={{
-                  padding: "10px 18px",
-                  background: "gold",
-                  border: "none",
-                  borderRadius: 8,
-                  cursor: "pointer"
-                }}
+                style={{ padding: "10px 18px", background: "gold", border: "none", borderRadius: 8, cursor: "pointer" }}
               >
                 {lvl.name}
               </button>
@@ -387,7 +315,9 @@ export default function App() {
     );
   }
 
+  // ---------------------------
   // GIOCO
+  // ---------------------------
   const levelObj = mode === "arcade" ? null : levels[currentLevel];
   return (
     <Game
@@ -396,10 +326,7 @@ export default function App() {
       mode={mode}
       currentLevel={currentLevel}
       onNextLevel={handleNextLevel}
-      onExit={() => {
-        setMode(null);
-        setCurrentLevel(null);
-      }}
+      onExit={() => { setMode(null); setCurrentLevel(null); }}
     />
   );
 }

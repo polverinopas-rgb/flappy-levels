@@ -2,7 +2,8 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- viewport aggiornato per iOS notch e per viewport-fit -->
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <title>Flappy Levels</title>
 
@@ -15,13 +16,35 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <style>
+      /* assicurati che il documento usi la safe area */
+      html, body, #root { height: 100%; }
+      body { margin: 0; background-color: #000; -webkit-font-smoothing:antialiased; }
+    </style>
   </head>
 
-  <body style="margin:0; background-color:#000;">
+  <body>
     <noscript>Attiva JavaScript per visualizzare questo sito correttamente.</noscript>
     <div id="root"></div>
 
-    <!-- Disabilita eventuali service worker -->
+    <!-- Script: calcola --vh per iOS e aggiorna su resize/orientationchange -->
+    <script>
+      (function () {
+        function setVh() {
+          // 1vh reale in px
+          const vh = window.innerHeight * 0.01;
+          document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        setVh();
+        window.addEventListener('resize', setVh);
+        window.addEventListener('orientationchange', function () {
+          // piccolo timeout perché iOS ha bisogno di tempo dopo rotazione
+          setTimeout(setVh, 250);
+        });
+      })();
+    </script>
+
+    <!-- Disabilita eventuali service worker (mantieni, se vuoi) -->
     <script type="module">
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.getRegistrations()
@@ -30,7 +53,6 @@
       }
     </script>
 
-    <!-- Script principale (Vite gestirà il bundle in produzione) -->
     <script type="module" src="/src/main.jsx"></script>
-  </body>
+  </body>
 </html>
